@@ -1,0 +1,142 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tính Thuế Thu Nhập Cá Nhân</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #e6e7e5;
+            margin: 0;
+            padding: 0;
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+            margin-top: 20px;
+        }
+
+        .container {
+            width: 80%;
+            max-width: 600px;
+            margin: 20px auto;
+            padding: 20px;
+            background: #fff;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        label {
+            font-weight: bold;
+        }
+
+        input {
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 1em;
+        }
+
+        button {
+            padding: 10px;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            font-size: 1em;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        .result {
+            margin-top: 20px;
+            padding: 10px;
+            background: #e9ecef;
+            border-radius: 5px;
+            font-size: 1em;
+        }
+
+        strong {
+            color: #007bff;
+        }
+    </style>
+</head>
+<body>
+    <h1>Tính Thuế Thu Nhập Cá Nhân</h1>
+    <div class="container">
+        <form id="taxForm">
+            <label for="name">Họ và tên:</label>
+            <input type="text" id="name" placeholder="Nhập họ và tên" required>
+
+            <label for="income">Tổng thu nhập năm (triệu):</label>
+            <input type="number" id="income" placeholder="Nhập tổng thu nhập" required>
+
+            <label for="dependents">Số người phụ thuộc:</label>
+            <input type="number" id="dependents" placeholder="Nhập số người phụ thuộc" min="0" required>
+
+            <button type="button" onclick="calculateTax()">Tính Thuế</button>
+            <a href="qlts.html" class="arrow">→ Chuyển Đến Bài Tập Quản lý Tuyển Sinh</a>
+        </form>
+
+        <div id="result" class="result" style="display: none;"></div>
+    </div>
+
+    <script>
+        function calculateTax() {
+            const name = document.getElementById("name").value;
+            const income = parseFloat(document.getElementById("income").value);
+            const dependents = parseInt(document.getElementById("dependents").value);
+
+            if (isNaN(income) || isNaN(dependents) || income < 0 || dependents < 0) {
+                alert("Vui lòng nhập thông tin hợp lệ.");
+                return;
+            }
+            const taxableIncome = income - 4 - (dependents * 1.6);
+
+            let taxRate = 0;
+            if (taxableIncome <= 0) {
+                taxRate = 0;
+            } else if (taxableIncome <= 60) {
+                taxRate = 5;
+            } else if (taxableIncome <= 120) {
+                taxRate = 10;
+            } else if (taxableIncome <= 210) {
+                taxRate = 15;
+            } else if (taxableIncome <= 384) {
+                taxRate = 20;
+            } else if (taxableIncome <= 624) {
+                taxRate = 25;
+            } else if (taxableIncome <= 960) {
+                taxRate = 30;
+            } else {
+                taxRate = 35;
+            }
+
+            const tax = taxableIncome > 0 ? (taxableIncome * taxRate) / 100 : 0;
+            const result = document.getElementById("result");
+            result.style.display = "block";
+            result.innerHTML = `
+                <p><strong>Họ và tên:</strong> ${name}</p>
+                <p><strong>Tổng thu nhập năm:</strong> ${income} triệu</p>
+                <p><strong>Số người phụ thuộc:</strong> ${dependents} người</p>
+                <p><strong>Thu nhập chịu thuế:</strong> ${taxableIncome.toFixed(2)} triệu</p>
+                <p><strong>Thuế suất:</strong> ${taxRate}%</p>
+                <p><strong>Thuế phải trả:</strong> ${tax.toFixed(2)} triệu</p>
+            `;
+        }
+    </script>
+</body>
+</html>
+

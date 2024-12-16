@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tính Tiền Cáp</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 20px;
+        }
+        .container {
+            background: #ffffff;
+            padding: 20px;
+            border-radius: 8px;
+            max-width: 500px;
+            margin: auto;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        h2 {
+            text-align: center;
+            color: #333;
+        }
+        label {
+            margin-top: 10px;
+            display: block;
+            font-weight: bold;
+        }
+        input, select {
+            width: 100%;
+            padding: 10px;
+            margin-top: 5px;
+            margin-bottom: 15px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        button {
+            width: 100%;
+            background-color: #007BFF;
+            color: white;
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        #result {
+            margin-top: 20px;
+            font-size: 18px;
+            color: #333;
+            text-align: center;
+            font-weight: bold;
+        }
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Chương Trình Tính Tiền Cáp</h2>
+        <label for="customerId">Mã Khách Hàng:</label>
+        <input type="text" id="customerId" placeholder="Nhập mã khách hàng">
+
+        <label for="customerType">Loại Khách Hàng:</label>
+        <select id="customerType" onchange="toggleConnectionField()">
+            <option value="residential">Nhà dân</option>
+            <option value="business">Doanh nghiệp</option>
+        </select>
+
+        <div id="connectionsWrapper" class="hidden">
+            <label for="connections">Số Kết Nối:</label>
+            <input type="number" id="connections" min="0" placeholder="Nhập số kết nối">
+        </div>
+
+        <label for="channels">Số Kênh Cao Cấp:</label>
+        <input type="number" id="channels" min="0" placeholder="Nhập số kênh cao cấp">
+
+        <button onclick="calculateBill()">Tính Tiền</button>
+        <a href="TTTNCN.html" class="arrow">← Chuyển đến bài tập Tính Thuế Thu Nhập Cá Nhân </a>
+        <div id="result"></div>
+    </div>
+
+    <script>
+        function toggleConnectionField() {
+            const customerType = document.getElementById("customerType").value;
+            const connectionsWrapper = document.getElementById("connectionsWrapper");
+
+            if (customerType === "business") {
+                connectionsWrapper.classList.remove("hidden");
+            } else {
+                connectionsWrapper.classList.add("hidden");
+                document.getElementById("connections").value = 0;
+            }
+        }
+        function calculateBill() {
+            const customerId = document.getElementById("customerId").value.trim();
+            const customerType = document.getElementById("customerType").value;
+            const connections = parseInt(document.getElementById("connections").value) || 0;
+            const channels = parseInt(document.getElementById("channels").value) || 0;
+
+            let processingFee = 0, basicServiceFee = 0, premiumChannelFee = 0, total = 0;
+
+            if (customerType === "residential") {
+                processingFee = 4.5;
+                basicServiceFee = 20.5;
+                premiumChannelFee = channels * 7.5;
+            } else if (customerType === "business") { 
+                processingFee = 15;
+                basicServiceFee = 75;
+                if (connections > 10) {
+                    basicServiceFee += (connections - 10) * 5;
+                }
+                premiumChannelFee = channels * 50;
+            }
+
+            total = processingFee + basicServiceFee + premiumChannelFee;
+            if (customerId === "") {
+                document.getElementById("result").innerText = "Vui lòng nhập mã khách hàng!";
+            } else {
+                document.getElementById("result").innerText = 
+                    `Mã Khách Hàng: ${customerId}\nTổng Tiền Cáp: $${total.toFixed(2)}`;
+            }
+        }
+    </script>
+</body>
+</html>

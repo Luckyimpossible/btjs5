@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tính Tiền Điện Phòng Trọ</title>
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f4f4f4;
+      text-align: center;
+      margin: 0;
+      padding: 0;
+    }
+    .container {
+      background: #fff;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      max-width: 400px;
+      margin: 50px auto;
+    }
+    h1 {
+      color: #333;
+    }
+    input {
+      width: 100%;
+      padding: 10px;
+      margin-bottom: 15px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+    button {
+      background: #4CAF50;
+      color: white;
+      padding: 10px 15px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 16px;
+    }
+    button:hover {
+      background: #45a049;
+    }
+    #result {
+      margin-top: 20px;
+      font-size: 20px;
+      color: #333;
+    }
+    .arrow {
+      font-size: 24px;
+      text-decoration: none;
+      color: #4CAF50;
+      margin-top: 20px;
+      display: block;
+    }
+    .arrow:hover {
+      color: #45a049;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Tính Tiền Điện Phòng Trọ</h1>   
+    <script src="Electricity-bill-calculation.js"></script>
+    <input type="text" id="name" placeholder="Nhập tên của bạn">
+    <input type="number" id="kwh" placeholder="Nhập số kW tiêu thụ" min="0">
+    <button onclick="calculateElectricityBill()">Tính Tiền Điện</button>
+    <a href="TTcap.html" class="arrow">→ Chuyển Đến Bài Tập Tính Tiền Cáp </a>
+    <div id="result"></div>
+  </div>
+
+  <script>
+    function calculateElectricityBill() {
+      const name = document.getElementById('name').value;
+      const kwh = parseInt(document.getElementById('kwh').value);
+      let total = 0;
+
+      if (isNaN(kwh) || kwh < 0 || name.trim() === "") {
+        alert("Vui lòng nhập tên và số kW hợp lệ!");
+        return;
+      }
+
+      let remaining = kwh;
+
+      if (remaining > 0) {
+        const first50 = Math.min(remaining, 50);
+        total += first50 * 500;
+        remaining -= first50;
+      }
+
+      if (remaining > 0) {
+        const next50 = Math.min(remaining, 50);
+        total += next50 * 650;
+        remaining -= next50;
+      }
+
+      if (remaining > 0) {
+        const next100 = Math.min(remaining, 100);
+        total += next100 * 850;
+        remaining -= next100;
+      }
+
+      if (remaining > 0) {
+        const next150 = Math.min(remaining, 150);
+        total += next150 * 1100;
+        remaining -= next150;
+      }
+
+      if (remaining > 0) {
+        total += remaining * 1300;
+      }
+
+      document.getElementById('result').innerHTML = 
+        `Xin chào ${name}, số tiền điện bạn phải trả là: <strong>${total.toLocaleString()} đồng</strong>`;
+    }
+  </script>
+</body>
+</html>
